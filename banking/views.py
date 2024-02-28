@@ -22,7 +22,9 @@ def register(request):
             # Создаем пользователя
             user = User.objects.create_user(username=form.cleaned_data['email'].lower(),
                                             email=form.cleaned_data['email'],
-                                            password=form.cleaned_data['password'])
+                                            password=form.cleaned_data['password'],
+                                            first_name=form.cleaned_data['first_name'],
+                                            last_name=form.cleaned_data['last_name'])
 
             # Создаем запись в таблице Account
             account = Account.objects.create(user=user)
@@ -30,12 +32,13 @@ def register(request):
             # Перенаправляем на страницу успеха
             return redirect('success_account')
         else:
-            messages.error(request, 'Invalid data.')
+            messages.error(request, 'you invalid.')
     return render(request, 'banking/signup.html')
 
 
 def success_account(request):
     return render(request, 'banking/signup_done.html')
+
 
 
 
