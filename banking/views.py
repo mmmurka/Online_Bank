@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm, UserLoginForm
 from .models import Account, User
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 
 
 
@@ -64,3 +64,9 @@ def cabinet(request):
     if not request.user.is_authenticated:
         return redirect('login')
     return render(request, 'banking/cabinet.html')
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('home')
+
