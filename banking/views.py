@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 
 
+
 def home(request):
     return render(request, 'banking/home.html')
 
@@ -35,6 +36,8 @@ def register(request):
 
 
 def user_login(request):
+    if request.user.is_authenticated:
+        return redirect('cabinet')
     if request.method == 'POST':
         form = UserLoginForm(request.POST)
         if form.is_valid():
@@ -58,4 +61,6 @@ def success_account(request):
 
 
 def cabinet(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     return render(request, 'banking/cabinet.html')
