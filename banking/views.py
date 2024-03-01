@@ -1,15 +1,13 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UserLoginForm
 from .models import Account, User
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
 
 
 def home(request):
     return render(request, 'banking/home.html')
-
-
-def login(request):
-    return render(request, 'banking/login.html')
 
 
 def register(request):
@@ -36,9 +34,28 @@ def register(request):
     return render(request, 'banking/signup.html')
 
 
+def user_login(request):
+    if request.method == 'POST':
+        form = UserLoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(username=cd['email'], password=cd['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return redirect('cabinet')
+                else:
+                    messages.error(request, 'account inactive')
+            else:
+                messages.error(request, 'invalid login')
+    else:
+        form = UserLoginForm()
+    return render(request, 'banking/login.html', {'form': form})
+
+
 def success_account(request):
     return render(request, 'banking/signup_done.html')
 
 
-
-
+def cabinet(request):
+    return render(request, 'banking/cabinet.html')

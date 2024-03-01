@@ -20,3 +20,8 @@ class UserRegistrationForm(forms.Form):
         if User.objects.filter(email=email).exists():
             raise forms.ValidationError("This email is already registered.")
         return email
+
+
+class UserLoginForm(forms.Form):
+    email = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
