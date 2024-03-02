@@ -4,7 +4,7 @@ from .forms import UserRegistrationForm, UserLoginForm
 from .models import Account, User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -60,10 +60,10 @@ def success_account(request):
     return render(request, 'banking/signup_done.html')
 
 
+@login_required
 def cabinet(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    return render(request, 'banking/cabinet.html')
+    username = request.user.first_name
+    return render(request, 'banking/cabinet.html', {'username': username})
 
 
 def user_logout(request):
