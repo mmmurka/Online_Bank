@@ -31,7 +31,7 @@ def register(request):
             # Перенаправляем на страницу успеха
             return redirect('success_account')
         else:
-            messages.error(request, 'you invalid.')
+            messages.error(request, form.errors)
     return render(request, 'banking/signup.html')
 
 

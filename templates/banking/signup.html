@@ -39,6 +39,20 @@
           <div class="text">
             <p class="text-body-secondary">У вас есть аккаунт? <a href="{% url 'login' %}" data-bs-toggle="modal" data-bs-target="#modalSignin">Войдите</a></p>
           </div>
+            
+            {% if form.errors %}
+        <div class="alert alert-danger">
+            <strong>Ошибка!</strong> Пожалуйста, исправьте следующие ошибки:
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+            
           <button class="w-100 mb-2 btn btn-lg rounded-3 btn-primary" type="submit">Sign up</button>
           <small class="text-body-secondary">By clicking Sign up, you agree to the terms of use.</small>
           <hr class="my-4">
