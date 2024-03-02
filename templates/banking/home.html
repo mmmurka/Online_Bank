@@ -12,9 +12,9 @@
             <a class="btn btn-dark btn-lg mr-3" href="{% url 'login' %}" role="button">Log in</a>
             <a class="btn btn-dark btn-lg" href="{% url 'register' %}" role="button">Sign Up</a>
         {% else %}
-            <p>Hello</p>
+            <p>{{ username }} </p>
         {% endif %}
-        
+
 
     </div>
     </div>
