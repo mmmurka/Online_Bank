@@ -5,12 +5,18 @@ from .models import Account, User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
+import pytz
 
 
 def home(request):
     auth_user = request.user.is_authenticated
     username = request.user.first_name
-    return render(request, 'banking/home.html', {'auth_user': auth_user, 'username': username})
+    user_timezone = get_user_timezone(request)
+    current_time = datetime.now(pytz.timezone(user_timezone))
+    time_of_day = get_time_of_day(current_time)
+    context = {'time_of_day': time_of_day}
+    return render(request, 'banking/home.html', {'auth_user': auth_user, 'username': username, **context})
 
 
 def register(request):
@@ -72,3 +78,21 @@ def user_logout(request):
     logout(request)
     return redirect('home')
 
+
+def get_user_timezone(request):
+    # Получение информации о часовом поясе пользователя из request
+    # Здесь можно использовать, например, информацию из cookies или профиля пользователя
+    # В данном примере используется часовой пояс сервера в случае отсутствия информации от пользователя
+    return request.COOKIES.get('user_timezone', 'UTC')
+
+
+def get_time_of_day(current_time):
+    hour = current_time.hour
+    if 6 <= hour < 12:
+        return 'Good morning'
+    elif 12 <= hour < 18:
+        return 'Have a nice day'
+    elif 18 <= hour < 24:
+        return 'Good evening'
+    else:
+        return 'Good night'
