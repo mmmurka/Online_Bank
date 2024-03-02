@@ -8,7 +8,8 @@ from django.contrib.auth.decorators import login_required
 
 
 def home(request):
-    return render(request, 'banking/home.html')
+    auth_user = request.user.is_authenticated
+    return render(request, 'banking/home.html', {'auth_user': auth_user})
 
 
 def register(request):
