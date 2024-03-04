@@ -11,7 +11,11 @@ import pytz
 
 def home(request):
     auth_user = request.user.is_authenticated
-    username = request.user.first_name
+    try:
+        username = request.user.first_name
+    except AttributeError:
+        username = 'Guest'
+
     user_timezone = get_user_timezone(request)
     current_time = datetime.now(pytz.timezone(user_timezone))
     time_of_day = get_time_of_day(current_time)
