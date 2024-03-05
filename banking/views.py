@@ -16,11 +16,18 @@ def home(request):
     except AttributeError:
         username = 'Guest'
 
+    common_context = get_common_context(request)
+    return render(request, 'banking/home.html', {'auth_user': auth_user, 'username': username, **common_context})
+
+
+def get_common_context(request):
     user_timezone = get_user_timezone(request)
     current_time = datetime.now(pytz.timezone(user_timezone))
     time_of_day = get_time_of_day(current_time)
-    context = {'time_of_day': time_of_day}
-    return render(request, 'banking/home.html', {'auth_user': auth_user, 'username': username, **context})
+
+    return {
+        'time_of_day': time_of_day,
+    }
 
 
 def register(request):
@@ -78,7 +85,10 @@ def cabinet(request):
     balance = Account.objects.get(user=request.user).balance
     last_name = request.user.last_name
     email = Account.objects.get(user=request.user).user.email
-    return render(request, 'banking/cabinet.html', {'username': username, 'last_name': last_name, 'balance': balance, 'email': email})
+
+    common_context = get_common_context(request)
+
+    return render(request, 'banking/cabinet.html', {'username': username, 'last_name': last_name, 'balance': balance, 'email': email, **common_context})
 
 
 def user_logout(request):
