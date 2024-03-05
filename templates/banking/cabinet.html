@@ -16,10 +16,10 @@
 
                     <!-- Przyciski do akcji -->
                     {% csrf_token %}
-                    <p> Make transaction</p>
-                    <a class="btn btn-warning btn-lg mr-3" href="{% url 'logout' %}" role="button">Log out</a>
-                    <p>Log in to your cabinet.</p>
-                    <a class="btn btn-dark btn-lg mr-3" href="{% url 'logout' %}" role="button">Log out</a>   
+                    
+                <a class="btn btn-dark btn-lg mr-3" href="{% url 'logout' %}" role="button">Log out</a>
+                <a class="btn btn-primary btn-lg" href="{% url 'home' %}" role="button">Transaction</a>
+                    
             </div>
         
 
