@@ -2,11 +2,22 @@
 {% block content %}
 <div class="container">
     <div class="jumbotron mt-4" style="background-image: linear-gradient(to bottom right, DodgerBlue, 30%, pink); border-radius: 15px;">
-        <h1 class="display-4">{{ username }}, welcome bank!</h1>
+        <h1 class="display-4">{{ username }}, </h1>
         <p class="lead">We are glad to see you in our bank system.</p>
         <hr class="my-4">
-        <p>Log in to your cabinet.</p>
-        <a class="btn btn-dark btn-lg mr-3" href="{% url 'logout' %}" role="button">Log out</a>
+        
+        
+         <div class="col-md-8">
+                    <h5 class="card-title">My Account Information</h5>
+                    <p><strong>First Name:</strong> {{ username }}</p>
+                    <p><strong>Last Name:</strong> {{ last_name }}</p>
+                    <p><strong>Email:</strong> {{ email }}</p>
+                    <p><strong>Balance:</strong> {{ balance }} $</p>
+
+                    <!-- Przyciski do akcji -->
+                    {% csrf_token %}
+                    <p>Log in to your cabinet.</p>
+                    <a class="btn btn-dark btn-lg mr-3" href="{% url 'logout' %}" role="button">Log out</a>                </div>
         
 
     </div>

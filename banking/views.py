@@ -75,7 +75,10 @@ def success_account(request):
 @login_required
 def cabinet(request):
     username = request.user.first_name
-    return render(request, 'banking/cabinet.html', {'username': username})
+    balance = Account.objects.get(user=request.user).balance
+    last_name = request.user.last_name
+    email = Account.objects.get(user=request.user).user.email
+    return render(request, 'banking/cabinet.html', {'username': username, 'last_name': last_name, 'balance': balance, 'email': email})
 
 
 def user_logout(request):
@@ -96,7 +99,7 @@ def get_time_of_day(current_time):
         return 'Good morning'
     elif 12 <= hour < 18:
         return 'Have a nice day'
-    elif 18 <= hour < 24:
+    elif 18 <= hour < 23:
         return 'Good evening'
     else:
         return 'Good night'
