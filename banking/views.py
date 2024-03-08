@@ -113,3 +113,40 @@ def get_time_of_day(current_time):
         return 'Good evening'
     else:
         return 'Good night'
+
+
+@login_required
+def make_transaction(request):
+    if request.method == 'POST':
+        sender_account = Account.objects.get(user=request.user)
+        receiver_email = request.POST.get('receiver_email')
+        amount = request.POST.get('amount')
+
+        try:
+            receiver_user = User.objects.get(email=receiver_email)
+            receiver_account = Account.objects.get(user=receiver_user)
+        except User.DoesNotExist:
+            messages.error(request, 'Пользователь с указанным адресом электронной почты не найден.')
+            return redirect('cabinet')
+
+        try:
+            amount = float(amount)
+        except ValueError:
+            messages.error(request, 'Укажите корректную сумму для транзакции.')
+            return redirect('cabinet')
+
+        if sender_account.balance >= amount > 0:
+            sender_account.balance -= amount
+            receiver_account.balance += amount
+
+            sender_account.save()
+            receiver_account.save()
+
+            # Здесь также можно создать запись о транзакции в базе данных, если необходимо
+
+            messages.success(request, 'Транзакция успешно выполнена.')
+        else:
+            messages.error(request, 'Недостаточно средств на счете или указана некорректная сумма.')
+
+    return redirect('cabinet')
+
