@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from datetime import datetime
 from .exchange_rate import get_exchange_rate
+from django.core.cache import cache
 import pytz
 
 
@@ -18,11 +19,17 @@ def home(request):
     except AttributeError:
         username = 'Guest'
 
-    try:
+    exchange_rate = cache.get('exchange_rate')
+
+    if exchange_rate:
+        uah_to_usd_rate, uah_to_eur_rate = exchange_rate
+    else:
+        # Если данные не в кеше, вызываем функцию get_exchange_rate
         uah_to_usd_rate, uah_to_eur_rate = get_exchange_rate()
-    except:
-        uah_to_usd_rate = 0
-        uah_to_eur_rate = 0
+
+    uah_to_usd_rate = str(uah_to_usd_rate)[:-2]
+    uah_to_eur_rate = str(uah_to_eur_rate)[:-2]
+
     common_context = get_common_context(request)
     return render(request, 'banking/home.html',
                   {'auth_user': auth_user,
