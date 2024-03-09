@@ -9,6 +9,15 @@
         {% if auth_user %}
             <div>
                 {{ username }}, {{ time_of_day }}!
+                <div class="col-md-4">
+                    <div class="card" style="background-color: rgba(255, 255, 255, 0.4);">
+                        <div class="card-body">
+                            <h5 class="card-title">Currency Rates</h5>
+                            <p>1 USD = {{ uah_to_usd_rate }} UAH</p>
+                            <p>1 EUR = {{ uah_to_eur_rate }} UAH</p>
+                        </div>
+                    </div>
+                </div>
             
             </div>
             

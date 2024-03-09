@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from datetime import datetime
+from .exchange_rate import get_exchange_rate
 import pytz
 
 
@@ -17,8 +18,18 @@ def home(request):
     except AttributeError:
         username = 'Guest'
 
+    try:
+        uah_to_usd_rate, uah_to_eur_rate = get_exchange_rate()
+    except:
+        uah_to_usd_rate = 0
+        uah_to_eur_rate = 0
     common_context = get_common_context(request)
-    return render(request, 'banking/home.html', {'auth_user': auth_user, 'username': username, **common_context})
+    return render(request, 'banking/home.html',
+                  {'auth_user': auth_user,
+                   'username': username,
+                   'uah_to_usd_rate': uah_to_usd_rate,
+                   'uah_to_eur_rate': uah_to_eur_rate,
+                   **common_context})
 
 
 def get_common_context(request):
