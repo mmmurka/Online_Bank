@@ -1,4 +1,3 @@
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from .forms import UserRegistrationForm, UserLoginForm, PaymentForm
 from .models import Account, User, Transaction

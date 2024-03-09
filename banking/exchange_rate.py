@@ -1,7 +1,6 @@
-# get_exchange_rate.py
 import requests
-from datetime import timedelta
 from django.core.cache import cache
+
 
 def get_exchange_rate():
     # Пытаемся получить данные из кеша
