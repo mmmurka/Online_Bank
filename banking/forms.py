@@ -26,3 +26,8 @@ class UserRegistrationForm(forms.Form):
 class UserLoginForm(forms.Form):
     email = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
+
+
+class PaymentForm(forms.Form):
+    email = forms.EmailField()
+    amount = forms.DecimalField(max_digits=10, decimal_places=2)

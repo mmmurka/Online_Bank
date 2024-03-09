@@ -1,10 +1,11 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .forms import UserRegistrationForm, UserLoginForm
-from .models import Account, User
+from .forms import UserRegistrationForm, UserLoginForm, PaymentForm
+from .models import Account, User, Transaction
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.db import transaction
 from datetime import datetime
 import pytz
 
@@ -115,38 +116,40 @@ def get_time_of_day(current_time):
         return 'Good night'
 
 
-@login_required
-def make_transaction(request):
+@transaction.atomic
+def transfer(request):
     if request.method == 'POST':
-        sender_account = Account.objects.get(user=request.user)
-        receiver_email = request.POST.get('receiver_email')
-        amount = request.POST.get('amount')
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            recipient = form.cleaned_data['email']
+            amount = form.cleaned_data['amount']
 
-        try:
-            receiver_user = User.objects.get(email=receiver_email)
-            receiver_account = Account.objects.get(user=receiver_user)
-        except User.DoesNotExist:
-            messages.error(request, 'Пользователь с указанным адресом электронной почты не найден.')
-            return redirect('cabinet')
+            if User.objects.filter(username=recipient).exists():
+                try:
+                    with transaction.atomic():
+                        # Проверяем есть ли деньги на счету у переводящего
+                        if amount > request.user.account.balance:
+                            messages.error(request, 'Insufficient funds.')
+                            return redirect('transfer')
 
-        try:
-            amount = float(amount)
-        except ValueError:
-            messages.error(request, 'Укажите корректную сумму для транзакции.')
-            return redirect('cabinet')
+                        # Уменьшаем баланс отправителя
+                        request.user.account.balance -= amount
+                        request.user.account.save()
 
-        if sender_account.balance >= amount > 0:
-            sender_account.balance -= amount
-            receiver_account.balance += amount
+                        # Увеличиваем баланс получателя
+                        recipient_account = Account.objects.get(user__username=recipient)
+                        recipient_account.balance += amount
+                        recipient_account.save()
 
-            sender_account.save()
-            receiver_account.save()
+                        # Создаем запись о транзакции
+                        Transaction.objects.create(from_account=request.user.account, to_account=recipient_account,
+                                                   amount=amount)
 
-            # Здесь также можно создать запись о транзакции в базе данных, если необходимо
+                        return redirect('success_transfer')
 
-            messages.success(request, 'Транзакция успешно выполнена.')
-        else:
-            messages.error(request, 'Недостаточно средств на счете или указана некорректная сумма.')
+                except Exception as e:
+                    messages.error(request, f'Transaction failed: {str(e)}')
+            else:
+                messages.error(request, 'Account not found.')
 
-    return redirect('cabinet')
-
+    return render(request, 'banking/transfer.html')
