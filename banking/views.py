@@ -142,8 +142,8 @@ def transfer(request):
                         recipient_account.save()
 
                         # Создаем запись о транзакции
-                        Transaction.objects.create(from_account=request.user.account, to_account=recipient_account,
-                                                   amount=amount)
+                        Transaction.create_transaction(sender=request.user.account,
+                                                       receiver=recipient_account, amount=amount)
 
                         return redirect('success_transfer')
 
@@ -153,3 +153,7 @@ def transfer(request):
                 messages.error(request, 'Account not found.')
 
     return render(request, 'banking/transfer.html')
+
+
+def success_transfer(request):
+    return render(request, 'banking/success_transfer.html')

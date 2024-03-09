@@ -1,0 +1,12 @@
+{% extends 'banking/base.html' %}
+
+{% block title %}Success Transfer{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-success" role="alert">
+        Transfer successful!
+    </div>
+    <a href="{% url 'cabinet' %}" class="btn btn-primary">Back to Cabinet</a>
+</div>
+{% endblock %}
