@@ -18,7 +18,11 @@ def home(request):
     except AttributeError:
         username = 'Guest'
 
-    uah_to_usd_rate, uah_to_eur_rate = exchange_rate()
+    uah_to_usd_rate, uah_to_eur_rate = get_exchange_rate()
+
+    uah_to_usd_rate = str(uah_to_usd_rate)[:-2]
+    uah_to_eur_rate = str(uah_to_eur_rate)[:-2]
+
     common_context = get_common_context(request)
     return render(request, 'banking/home.html',
                   {'auth_user': auth_user,
@@ -26,22 +30,6 @@ def home(request):
                    'uah_to_usd_rate': uah_to_usd_rate,
                    'uah_to_eur_rate': uah_to_eur_rate,
                    **common_context})
-
-
-def exchange_rate():
-    # Пытаемся получить данные из кеша
-    exchange_rate = cache.get('exchange_rate')
-
-    if exchange_rate:
-        uah_to_usd_rate, uah_to_eur_rate = exchange_rate
-    else:
-        # Если данные не в кеше, вызываем функцию get_exchange_rate
-        uah_to_usd_rate, uah_to_eur_rate = get_exchange_rate()
-
-    uah_to_usd_rate = str(uah_to_usd_rate)[:-2]
-    uah_to_eur_rate = str(uah_to_eur_rate)[:-2]
-
-    return uah_to_usd_rate, uah_to_eur_rate
 
 
 def get_common_context(request):
