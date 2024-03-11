@@ -29,7 +29,7 @@ def get_exchange_rate():
                 logger.info(f"Data saved in cache: USD {uah_to_usd_rate}, EUR {uah_to_eur_rate}")
                 return uah_to_usd_rate, uah_to_eur_rate
             else:
-                logger.error(f"Failed to fetch data. Status code: {response.status_code}")
+                logger.warning(f"Failed to fetch data. Status code: {response.status_code}")
                 uah_to_usd_rate = 0.00
                 uah_to_eur_rate = 0.00
                 return uah_to_usd_rate, uah_to_eur_rate
