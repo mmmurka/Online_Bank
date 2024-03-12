@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import login_required
 from django.db import transaction
 from datetime import datetime
 from .exchange_rate import get_exchange_rate
-from django.core.cache import cache
 import pytz
 
 
