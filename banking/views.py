@@ -92,18 +92,38 @@ def success_account(request):
 
 @login_required
 def cabinet(request):
+    # Получаем информацию о пользователе
     username = request.user.first_name
-    balance = Account.objects.get(user=request.user).balance
     last_name = request.user.last_name
-    email = Account.objects.get(user=request.user).user.email
+    email = request.user.email
 
+    # Получаем баланс пользователя
+    account = Account.objects.get(user=request.user)
+    balance = account.balance
+
+    # Получаем список транзакций для текущего пользователя
+    if account:
+        sent_transactions = Transaction.objects.filter(sender=account)
+        received_transactions = Transaction.objects.filter(receiver=account)
+        transactions = list(sent_transactions) + list(received_transactions)
+        transactions.sort(key=lambda x: x.timestamp, reverse=True)
+    else:
+        transactions = None
+
+    # Передаем общий контекст в функцию для получения обменных курсов
     common_context = get_common_context(request)
     uah_to_usd_rate, uah_to_eur_rate = get_exchange_rate()
     uah_balance = round(float(balance) * float(uah_to_usd_rate), 2)
 
-    return render(request, 'banking/cabinet.html', {'username': username, 'last_name': last_name,
-                                                    'balance': balance,
-                                                    'email': email, 'uah_balance': uah_balance, **common_context})
+    return render(request, 'banking/cabinet.html', {
+        'username': username,
+        'last_name': last_name,
+        'balance': balance,
+        'email': email,
+        'uah_balance': uah_balance,
+        'transactions': transactions,
+        **common_context
+    })
 
 
 def user_logout(request):

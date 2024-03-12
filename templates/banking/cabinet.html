@@ -6,24 +6,48 @@
         <p class="lead">We are glad to see you in our bank system.</p>
         <hr class="my-4">
         
-        
-         <div class="col-md-8">
-                    <h5 class="card-title">My Account Information</h5>
-                    <p><strong>First Name:</strong> {{ username }}</p>
-                    <p><strong>Last Name:</strong> {{ last_name }}</p>
-                    <p><strong>Email:</strong> {{ email }}</p>
-                    <p><strong>Balance:</strong> {{ balance }} $</p>
-                    <p><strong>Uah balance:</strong> {{ uah_balance }}</p>
+        <div class="row">
+            <div class="col-md-8">
+                <h5 class="card-title">My Account Information</h5>
+                <p><strong>First Name:</strong> {{ username }}</p>
+                <p><strong>Last Name:</strong> {{ last_name }}</p>
+                <p><strong>Email:</strong> {{ email }}</p>
+                <p><strong>Balance:</strong> {{ balance }} $</p>
+                <p><strong>Uah balance:</strong> {{ uah_balance }}</p>
 
-                    <!-- Przyciski do akcji -->
-                    {% csrf_token %}
-                    
+                <!-- Przyciski do akcji -->
+                {% csrf_token %}
                 <a class="btn btn-dark btn-lg mr-3" href="{% url 'logout' %}" role="button">Log out</a>
                 <a class="btn btn-primary btn-lg" href="{% url 'transfer' %}" role="button">Transaction</a>
-                    
             </div>
-        
+        </div>
 
+        <!-- История транзакций -->
+        <div class="row mt-4">
+            <div class="col-md-8">
+                <h5 class="card-title">Transaction History</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Sender</th>
+                            <th>Receiver</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.timestamp }}</td>
+                            <td>{{ transaction.sender.user.username }}</td>
+                            <td>{{ transaction.receiver.user.username }}</td>
+                            <td>${{ transaction.amount }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    </div>   
+</div>
 {% endblock %}
