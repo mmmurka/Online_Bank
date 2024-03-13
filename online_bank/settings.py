@@ -151,11 +151,9 @@ CACHES = {
 }
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_HOST_USER = 'mr.pipiskin18992@gmail.com'
+EMAIL_HOST_PASSWORD = 'MzdFfg2ItNQWZCq0'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'mr.pipiskiin13@gmail.com'  # замените на вашу почту Gmail
-EMAIL_HOST_PASSWORD = 'gtx9602gb'  # замените на пароль от вашей почты Gmail
-
-
