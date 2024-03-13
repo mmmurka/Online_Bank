@@ -6,6 +6,8 @@ __pycache__
 db.sqlite3
 media
 
+/online_bank/password.py
+
 # Backup files #
 *.bak
 
