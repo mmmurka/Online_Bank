@@ -11,7 +11,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 from django.core.cache.backends.redis import RedisCache
 from pathlib import Path
-from .password import password_email, email
+
+try:
+    from .password import password_email, email
+except ImportError:
+    password_email = '0'
+    email = '0@gmail.com'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
