@@ -4,8 +4,13 @@ certifi==2024.2.2
 charset-normalizer==3.3.2
 Django==5.0.2
 django-redis==5.4.0
+djangorestframework==3.14.0
 idna==3.6
+iniconfig==2.0.0
+packaging==24.0
+pluggy==1.4.0
 psycopg2-binary==2.9.9
+pytest==8.1.1
 python-memcached==1.62
 pytz==2024.1
 redis==5.0.2
