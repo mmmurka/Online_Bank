@@ -11,7 +11,7 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
     path('transfer/', views.transfer, name='transfer'),
     path('success_transfer/', views.success_transfer, name='success_transfer'),
-    # Стандартные представления Django для сброса пароля
+    # представления Django для сброса пароля
     path('password-reset/', UserForgotPasswordView.as_view(), name='password_reset'),
     path('set-new-password/<uidb64>/<token>/', UserPasswordResetConfirmView.as_view(), name='password_reset_confirm'),
 ]

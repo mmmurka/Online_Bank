@@ -16,8 +16,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+
+from banking.api_views import AccountListCreateAPIView, TransactionListCreateAPIView
+
+router = routers.DefaultRouter()
+router.register('api/accounts', AccountListCreateAPIView)
+router.register('api/transactions', TransactionListCreateAPIView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('banking.urls')),
+    path('', include(router.urls)),
 ]
