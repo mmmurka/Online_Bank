@@ -1,6 +1,10 @@
 from rest_framework import serializers
 from .models import Account, Transaction
 
+"""
+Сериализаторы для модели Account и Transaction
+"""
+
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
