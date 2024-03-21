@@ -2,7 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import Account
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UserLoginForm, PaymentForm
 
 
 class ViewsTestCase(TestCase):
@@ -61,4 +61,16 @@ class ViewsTestCase(TestCase):
                      'first_name': 'John',
                     'last_name': 'Doe'}
         form = UserRegistrationForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_user_login_form(self):
+        form_data = {'email': 'test1@example.com', 'password': 'testpassword123', 'password2': 'testpassword123',
+                     'first_name': 'John',
+                     'last_name': 'Doe'}
+        form = UserLoginForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_payment_form(self):
+        form_data = {'email': 'recipient@example.com', 'amount': 100}
+        form = PaymentForm(data=form_data)
         self.assertTrue(form.is_valid())
