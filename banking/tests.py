@@ -31,6 +31,19 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'banking/signup_done.html')
 
+    def test_cabinet_view(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('cabinet'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'banking/cabinet.html')
 
+    def test_user_logout_view(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('logout'))
+        self.assertEqual(response.status_code, 302)  # Redirects after logout
 
-
+    def test_transfer_view(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('transfer'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'banking/transfer.html')
