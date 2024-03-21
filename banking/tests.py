@@ -2,6 +2,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from django.contrib.auth.models import User
 from .models import Account
+from .forms import UserRegistrationForm
 
 
 class ViewsTestCase(TestCase):
@@ -47,3 +48,17 @@ class ViewsTestCase(TestCase):
         response = self.client.get(reverse('transfer'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'banking/transfer.html')
+
+    def test_success_transfer_view(self):
+        response = self.client.get(reverse('success_transfer'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'banking/success_transfer.html')
+
+        # Тесты для форм
+
+    def test_user_registration_form(self):
+        form_data = {'email': 'test1@example.com', 'password': 'testpassword123', 'password2': 'testpassword123',
+                     'first_name': 'John',
+                    'last_name': 'Doe'}
+        form = UserRegistrationForm(data=form_data)
+        self.assertTrue(form.is_valid())
