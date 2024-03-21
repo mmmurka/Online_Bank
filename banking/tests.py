@@ -25,3 +25,12 @@ class ViewsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'banking/login.html')
 
+    def test_success_account_view(self):
+        self.client.login(username='testuser', password='testpassword')
+        response = self.client.get(reverse('success_account'))
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'banking/signup_done.html')
+
+
+
+
