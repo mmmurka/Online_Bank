@@ -20,10 +20,14 @@ def home(request):
     except AttributeError:
         username = 'Guest'
 
-    uah_to_usd_rate, uah_to_eur_rate = get_exchange_rate()
-
-    uah_to_usd_rate = str(uah_to_usd_rate)[:-2]
-    uah_to_eur_rate = str(uah_to_eur_rate)[:-2]
+    exchange_rate = get_exchange_rate()
+    if exchange_rate is not None:
+        uah_to_usd_rate, uah_to_eur_rate = exchange_rate
+        uah_to_usd_rate = str(uah_to_usd_rate)[:-2]
+        uah_to_eur_rate = str(uah_to_eur_rate)[:-2]
+    else:
+        uah_to_usd_rate = 'N/A'
+        uah_to_eur_rate = 'N/A'
 
     common_context = get_common_context(request)
     return render(request, 'banking/home.html',
@@ -115,8 +119,14 @@ def cabinet(request):
 
     # Передаем общий контекст в функцию для получения обменных курсов
     common_context = get_common_context(request)
-    uah_to_usd_rate, uah_to_eur_rate = get_exchange_rate()
-    uah_balance = round(float(balance) * float(uah_to_usd_rate), 2)
+
+    try:
+        uah_to_usd_rate, uah_to_eur_rate = get_exchange_rate()
+        uah_balance = round(float(balance) * float(uah_to_usd_rate), 2)
+    except:
+        uah_to_usd_rate = 'N/A'
+        uah_to_eur_rate = 'N/A'
+        uah_balance = 'N/A'
 
     return render(request, 'banking/cabinet.html', {
         'username': username,

@@ -17,3 +17,5 @@ redis==5.0.2
 requests==2.31.0
 sqlparse==0.4.4
 urllib3==2.2.1
+gunicorn==21.2.0
+

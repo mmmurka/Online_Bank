@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 from django.core.cache.backends.redis import RedisCache
 from pathlib import Path
+import os
 
 try:
     from .password import password_email, email
@@ -31,7 +32,7 @@ SECRET_KEY = 'django-insecure-r3sno8og43tar28e!qe-x)5jj-66jqyoo+-9uj58zdm4_do(%b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -88,7 +89,7 @@ DATABASES = {
         'NAME': 'bank',
         'USER': 'mmmurka',
         'PASSWORD': '12341',
-        'HOST': 'localhost',
+        'HOST': 'db',
         'PORT': '5432',
     }
 }
@@ -131,12 +132,13 @@ USE_TZ = True
 
 LOGIN_URL = 'login'
 
-
+STATICFILES_DIRS = [
+    BASE_DIR / 'static/'
+]
 STATIC_URL = 'static/'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+MEDIA_URL = '/images/'
+MEDIA_ROOT = BASE_DIR / 'static' / 'images'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -147,7 +149,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379/1',  # Укажите адрес и порт вашего Redis-сервера
+        'LOCATION': 'redis://redis:6379/1',  # Изменен адрес для работы в Docker Compose
     }
 }
 
